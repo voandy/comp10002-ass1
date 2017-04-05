@@ -156,8 +156,12 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 
 	/* prints and visualises each total from coordinate sums */
 	for (i = 0; i < *num_points; i ++) {
-		printf("Point %02d, sum of coordinates (/100): %2.2lf\n", i + 1, 
+		printf("Point %02d, sum of coordinates (/100): %5.2f |", i + 1, 
 			coordinate_sums[i]);
+		for (int j = 0; j < coordinate_sums[i]; j++) {
+			printf("-");
+		}
+		printf("\n");
 
 	}
 }
