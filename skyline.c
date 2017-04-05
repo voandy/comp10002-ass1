@@ -111,7 +111,7 @@ stage_one(point_t one_point, int *num_points, int num_dimensions) {
 	/* add your code here for stage 1 */
 	printf("Point 01: <");
 
-	/* reads one poit and prints the coordinates */
+	/* reads one point and prints the coordinates */
 	read_one_point(one_point, num_dimensions);
 	for (int i = 0; i < num_dimensions; i++) {
 		printf("%.2lf", one_point[i]);
@@ -159,7 +159,12 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 		printf("Point %02d, sum of coordinates (/100): %5.2f |", i + 1, 
 			coordinate_sums[i]);
 		for (int j = 0; j < coordinate_sums[i]; j++) {
-			printf("-");
+			if (((j + 1) % 10) == 0) {
+				printf("+");
+			} 
+			else {
+				printf("-");
+			}
 		}
 		printf("\n");
 

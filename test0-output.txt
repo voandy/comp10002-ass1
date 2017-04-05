@@ -1,0 +1,39 @@
+Stage 1
+==========
+Point 01: <2.30, 300.00, 20.00>
+
+Stage 2
+==========
+Point 01, sum of coordinates (/100):  3.22 |----
+Point 02, sum of coordinates (/100): 10.18 |---------+-
+Point 03, sum of coordinates (/100):  5.35 |------
+Point 04, sum of coordinates (/100):  7.68 |--------
+Point 05, sum of coordinates (/100):  5.14 |------
+Point 06, sum of coordinates (/100):  6.11 |-------
+Point 07, sum of coordinates (/100): 10.00 |---------+
+
+Stage 3
+==========
+Total: 7 points
+Point of largest sum of coordinates: 02
+Largest sum of coordinates: 1017.70
+
+Stage 4
+==========
+Skyline points:
+Point 02: <1.70, 1000.00, 16.00>
+Point 03: <2.80, 500.00, 32.00>
+Point 04: <2.10, 750.00, 16.00>
+Point 07: <0.90, 900.00, 99.00>
+
+Stage 5
+==========
+Sorted skyline points:
+Point 03: <2.80, 500.00, 32.00>
+Number of points dominated: 2
+Point 04: <2.10, 750.00, 16.00>
+Number of points dominated: 2
+Point 02: <1.70, 1000.00, 16.00>
+Number of points dominated: 1
+Point 07: <0.90, 900.00, 99.00>
+Number of points dominated: 0
