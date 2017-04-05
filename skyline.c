@@ -144,21 +144,21 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 	}
 
 	*num_points = i;
-	/* adds up sum of coords for each point divides by 100 and adds
-	them to coordinate_sums[] */
+	/* adds up sum of coords for each point and adds them to 
+	coordinate_sums[] */
 	for (i = 0; i < *num_points; i ++) {
 		double total = 0;
 		for (int j = 0; j < num_dimensions; j++) {
 			total += points[i][j];
 		}
-		coordinate_sums[i] = total / 100;
+		coordinate_sums[i] = total;
 	}
 
-	/* prints and visualises each total from coordinate sums */
+	/* prints and graphs each total from coordinate sums */
 	for (i = 0; i < *num_points; i ++) {
 		printf("Point %02d, sum of coordinates (/100): %5.2f |", i + 1, 
-			coordinate_sums[i]);
-		for (int j = 0; j < coordinate_sums[i]; j++) {
+			coordinate_sums[i] / 100);
+		for (int j = 0; j < coordinate_sums[i] / 100; j++) {
 			if (((j + 1) % 10) == 0) {
 				printf("+");
 			} 
@@ -179,7 +179,21 @@ stage_three(double *coordinate_sums, int num_points) {
 	print_stage_heading(STAGE_NUM_THREE);
 	
 	/* add your code here for stage 3 */
+	printf("Total: %d points\n",num_points );
 
+	/* finds the point with the largest sum of coordinates. Uses < rather
+	than <= so that first such point is returned */
+	int point_lgst_sum = 0;
+	float lgst_sum = 0.0;	
+	for (int i = 0; i < num_points; i ++) {
+		if (coordinate_sums[i] > lgst_sum) {
+			point_lgst_sum = i + 1;
+			lgst_sum = coordinate_sums[i];
+		}
+	}
+
+	printf("Point of largest sum of coordinates: %02d\n", point_lgst_sum);
+	printf("Largest sum of coordinates: %.2f\n", lgst_sum);
 }
 
 /* stage 4 - find and print the skyline points
