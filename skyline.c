@@ -37,6 +37,8 @@ int read_one_point(point_t one_point, int num_dimensions);
 /* add your own function prototypes here */
 void point_cpy(point_t point_a, point_t point_b, int num_dimensions);
 int is_dominated(point_t point_a, point_t point_b, int num_dimensions);
+int is_skyline_point(point_t point_a, point_t points[], int num_points, 
+	int num_dimensions);
 
 /* main program binds it all together */
 int
@@ -116,7 +118,7 @@ stage_one(point_t one_point, int *num_points, int num_dimensions) {
 	/* reads one point and prints the coordinates */
 	read_one_point(one_point, num_dimensions);
 	for (int i = 0; i < num_dimensions; i++) {
-		printf("%.2lf", one_point[i]);
+		printf("%.2f", one_point[i]);
 		if (i < num_dimensions - 1) {
 			printf(", ");
 		}
@@ -209,27 +211,33 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	point_t point_a;
 	point_t skyline_points[num_points];
 	int skyline_points_count = 0;
+	int skyline_ref[num_points];
 
 	for (int i = 0; i < num_points; i++) {
 		/* copies a point from points to point_a*/
 		point_cpy(point_a, points[i], num_dimensions);
 
-		for (int j = 0; j < num_points; j++) {
-			if (is_dominated(point_a, points[j], num_dimensions)) {
-				break;
-			}
-			/* if point_a is not dominated by any other point we add it to
-			skyline_points */
-			point_cpy(skyline_points[skyline_points_count], point_a, 
-				num_dimensions);
+		/* if point_a is a skyline point, copies it to skyline_points */
+		if (is_skyline_point(point_a, points, num_points, num_dimensions)) {
+			point_cpy(skyline_points[skyline_points_count], point_a, num_dimensions);
+			skyline_ref[skyline_points_count] = i;
 			skyline_points_count++;
 		}
 	}
 
+	//printf("%d\n", skyline_points_count);
+
 	/* prints a list of our skyline points */
 	printf("Skyline points:\n");
 	for (int i = 0; i < skyline_points_count; i++) {
-		printf("Point %02d:\n", skyline_points_count + 1);
+		printf("Point %02d: <", skyline_ref[i] + 1);
+		for (int j = 0; j < num_dimensions; j++) {
+			printf("%.2f", skyline_points[i][j]);
+			if (j < num_dimensions - 1) {
+				printf(", ");
+			}
+		}
+		printf(">\n");
 	}
 }
 
@@ -243,12 +251,25 @@ void point_cpy(point_t point_a, point_t point_b, int num_dimensions) {
 /* given two points returns 1 if point_a is dominated by b and 0 otherwise */
 int is_dominated(point_t point_a, point_t point_b, int num_dimensions) {
 	for (int i = 0; i < num_dimensions; i++) {
-		if (point_a[i] > point_b[i]) {
+		if (point_b[i] < point_a[i]) {
 			return 0;
 		}
 	}
 	return 1;
 }
+
+/* given a point_a and an array of points will return 1 if point_a is a 
+skyline point and 0 otherwise */
+int
+is_skyline_point(point_t point_a, point_t points[], int num_points, int num_dimensions){
+	for (int i = 0; i < num_points; i++) {
+		if (is_dominated(point_a, points[i], num_dimensions)) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
 
 /* stage 5 - sort and print the skyline points by the number of points 
    they dominate
