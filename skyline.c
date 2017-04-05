@@ -143,7 +143,7 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 		i++;
 	}
 
-	printf("%lf", points[6][2]);
+	printf("%lf", points[6][0]);
 }
 
 /* stage 3 - print statistics
