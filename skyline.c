@@ -38,7 +38,7 @@ int read_one_point(point_t one_point, int num_dimensions);
 void point_cpy(point_t point_a, point_t point_b, int num_dimensions);
 int is_dominated(point_t point_a, point_t point_b, int num_dimensions);
 int is_skyline_point(point_t point_a, point_t points[], int num_points, 
-	int num_dimensions);
+	int num_dimensions, int skip);
 
 /* main program binds it all together */
 int
@@ -218,7 +218,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 		point_cpy(point_a, points[i], num_dimensions);
 
 		/* if point_a is a skyline point, copies it to skyline_points */
-		if (is_skyline_point(point_a, points, num_points, num_dimensions)) {
+		if (is_skyline_point(point_a, points, num_points, num_dimensions, i)) {
 			point_cpy(skyline_points[skyline_points_count], point_a, num_dimensions);
 			skyline_ref[skyline_points_count] = i;
 			skyline_points_count++;
@@ -242,14 +242,16 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 }
 
 /* given two points, will copy the coords from point_b to point_a */
-void point_cpy(point_t point_a, point_t point_b, int num_dimensions) {
+void 
+point_cpy(point_t point_a, point_t point_b, int num_dimensions) {
 	for (int i = 0; i < num_dimensions; i++) {
 		point_a[i] = point_b[i];
 	}
 }
 
 /* given two points returns 1 if point_a is dominated by b and 0 otherwise */
-int is_dominated(point_t point_a, point_t point_b, int num_dimensions) {
+int 
+is_dominated(point_t point_a, point_t point_b, int num_dimensions) {
 	for (int i = 0; i < num_dimensions; i++) {
 		if (point_b[i] < point_a[i]) {
 			return 0;
@@ -261,8 +263,12 @@ int is_dominated(point_t point_a, point_t point_b, int num_dimensions) {
 /* given a point_a and an array of points will return 1 if point_a is a 
 skyline point and 0 otherwise */
 int
-is_skyline_point(point_t point_a, point_t points[], int num_points, int num_dimensions){
+is_skyline_point(point_t point_a, point_t points[], int num_points, int num_dimensions, int skip){
 	for (int i = 0; i < num_points; i++) {
+		/* skips a point to prevent comparing a point to itself */
+		if (i == skip) {
+			i++;
+		}
 		if (is_dominated(point_a, points[i], num_dimensions)) {
 			return 0;
 		}
