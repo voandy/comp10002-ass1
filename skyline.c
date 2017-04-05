@@ -35,8 +35,8 @@ void print_stage_heading(int stage);
 int read_one_point(point_t one_point, int num_dimensions);
 
 /* add your own function prototypes here */
-int is_dominant(point_t point_a, point_t point_b, int num_dimensions);
-
+void point_cpy(point_t point_a, point_t point_b, int num_dimensions);
+int is_dominated(point_t point_a, point_t point_b, int num_dimensions);
 
 /* main program binds it all together */
 int
@@ -206,12 +206,44 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
+	point_t point_a;
+	point_t skyline_points[num_points];
+	int skyline_points_count = 0;
+
+	for (int i = 0; i < num_points; i++) {
+		/* copies a point from points to point_a*/
+		point_cpy(point_a, points[i], num_dimensions);
+
+		for (int j = 0; j < num_points; j++) {
+			if (is_dominated(point_a, points[j], num_dimensions)) {
+				break;
+			}
+			/* if point_a is not dominated by any other point we add it to
+			skyline_points */
+			point_cpy(skyline_points[skyline_points_count], point_a, 
+				num_dimensions);
+			skyline_points_count++;
+		}
+	}
+
+	/* prints a list of our skyline points */
+	printf("Skyline points:\n");
+	for (int i = 0; i < skyline_points_count; i++) {
+		printf("Point %02d:\n", skyline_points_count + 1);
+	}
 }
 
-/* given two points returns 1 if point_a dominates point a and 0 otherwise */
-int is_dominant(point_t point_a, point_t point_b, int num_dimensions) {
+/* given two points, will copy the coords from point_b to point_a */
+void point_cpy(point_t point_a, point_t point_b, int num_dimensions) {
 	for (int i = 0; i < num_dimensions; i++) {
-		if (point_b[i] > point_a[i]) {
+		point_a[i] = point_b[i];
+	}
+}
+
+/* given two points returns 1 if point_a is dominated by b and 0 otherwise */
+int is_dominated(point_t point_a, point_t point_b, int num_dimensions) {
+	for (int i = 0; i < num_dimensions; i++) {
+		if (point_a[i] > point_b[i]) {
 			return 0;
 		}
 	}
