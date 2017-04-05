@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #define DIV "==========" /* stage header */
 /* stage numbers */
@@ -34,6 +35,7 @@ void print_stage_heading(int stage);
 int read_one_point(point_t one_point, int num_dimensions);
 
 /* add your own function prototypes here */
+int is_dominant(point_t point_a, point_t point_b, int num_dimensions);
 
 
 /* main program binds it all together */
@@ -204,7 +206,16 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
+}
 
+/* given two points returns 1 if point_a dominates point a and 0 otherwise */
+int is_dominant(point_t point_a, point_t point_b, int num_dimensions) {
+	for (int i = 0; i < num_dimensions; i++) {
+		if (point_b[i] > point_a[i]) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
 /* stage 5 - sort and print the skyline points by the number of points 
@@ -216,6 +227,5 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FIVE);
 	
 	/* add your code here for stage 5 */
-
 }
 
