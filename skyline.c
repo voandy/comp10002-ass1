@@ -111,9 +111,8 @@ stage_one(point_t one_point, int *num_points, int num_dimensions) {
 	/* add your code here for stage 1 */
 	printf("Point 01: <");
 
-	/* reads num_dimensions number of inputs and prints them out */
+	/* reads one poit and prints the coordinates */
 	read_one_point(one_point, num_dimensions);
-
 	for (int i = 0; i < num_dimensions; i++) {
 		printf("%.2lf", one_point[i]);
 		if (i < num_dimensions - 1) {
@@ -135,6 +134,7 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 	point_t one_point;
 	/* add your code here for stage 2 */
 
+	/* populates points[] with data from the input*/
 	int i = 1;
 	while (read_one_point(one_point, num_dimensions)) {
 		for (int j = 0; j < num_dimensions; j++) {
@@ -143,7 +143,23 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 		i++;
 	}
 
-	printf("%lf", points[6][0]);
+	*num_points = i;
+	/* adds up sum of coords for each point divides by 100 and adds
+	them to coordinate_sums[] */
+	for (i = 0; i < *num_points; i ++) {
+		double total = 0;
+		for (int j = 0; j < num_dimensions; j++) {
+			total += points[i][j];
+		}
+		coordinate_sums[i] = total / 100;
+	}
+
+	/* prints and visualises each total from coordinate sums */
+	for (i = 0; i < *num_points; i ++) {
+		printf("Point %02d, sum of coordinates (/100): %2.2lf\n", i + 1, 
+			coordinate_sums[i]);
+
+	}
 }
 
 /* stage 3 - print statistics
