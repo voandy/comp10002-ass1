@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h>
 
 #define DIV "==========" /* stage header */
 /* stage numbers */
@@ -123,7 +122,7 @@ stage_one(point_t one_point, int *num_points, int num_dimensions) {
 	printf("Point 01: <");
 
 	/* reads one point and prints the coordinates */
-	int i = 0;
+	int i;
 	read_one_point(one_point, num_dimensions);
 
 	for (i = 0; i < num_dimensions; i++) {
@@ -146,7 +145,7 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 
 	point_t one_point;
 	/* add your code here for stage 2 */
-	int i, j = 0;
+	int i, j;
 
 	/* populates points[] with data from the input, i start at 1 as we have
 	already read one point in stage one */
@@ -199,7 +198,8 @@ stage_three(double *coordinate_sums, int num_points) {
 
 	/* finds the point with the largest sum of coordinates. Uses < rather
 	than <= so that first such point is returned */
-	int point_lgst_sum, i = 0;
+	int point_lgst_sum;
+	int i;
 	float lgst_sum = 0.0;
 
 	for (i = 0; i < num_points; i ++) {
@@ -223,17 +223,23 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	/* add your code here for stage 4 */
 	point_t point_a; /* stores a point to compare */
 	point_t skyline_points[num_points];
-	int skyline_points_count, i, j = 0;
-	int skyline_ref[num_points]; /* stores a ref no. to found skyline point */
+	int skyline_points_count = 0; 
+	int i, j;
+	int skyline_ref[num_points]; /* stores a ref no. to each skyline point */
+	int skip = 0;
 
 	for (i = 0; i < num_points; i++) {
 		/* copies a point from points to point_a*/
 		point_cpy(point_a, points[i], num_dimensions);
 
 		/* if point_a is a skyline point, copies it to skyline_points */
-		if (is_skyline_point(point_a, points, num_points, num_dimensions, i)) {
+		skip = i;
+		if (is_skyline_point(point_a, points, num_points, 
+			num_dimensions, skip)) {
+			
 			point_cpy(skyline_points[skyline_points_count], point_a, 
 				num_dimensions);
+			
 			skyline_ref[skyline_points_count] = i;
 			skyline_points_count++;
 		}
@@ -256,7 +262,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 /* given two points, will copy the coords from point_b to point_a */
 void 
 point_cpy(point_t point_a, point_t point_b, int num_dimensions) {
-	int i = 0;
+	int i;
 	for (i = 0; i < num_dimensions; i++) {
 		point_a[i] = point_b[i];
 	}
@@ -265,7 +271,7 @@ point_cpy(point_t point_a, point_t point_b, int num_dimensions) {
 /* given two points returns 1 if point_a is dominated by b and 0 otherwise */
 int 
 is_dominated(point_t point_a, point_t point_b, int num_dimensions) {
-	int i = 0;
+	int i;
 	for (i = 0; i < num_dimensions; i++) {
 		if (point_b[i] < point_a[i]) {
 			return 0;
@@ -279,7 +285,7 @@ skyline point and 0 otherwise */
 int
 is_skyline_point(point_t point_a, point_t points[], int num_points, 
 	int num_dimensions, int skip) {
-	int i = 0;
+	int i;
 	for (i = 0; i < num_points; i++) {
 		/* skips a point to prevent comparing a point to itself */
 		if (i == skip) {
