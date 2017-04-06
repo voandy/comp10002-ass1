@@ -1,5 +1,9 @@
 /* Skeleton code for COMP10002 Assignment 1, March 2017.
    Jianzhong Qi, jianzhong.qi@unimelb.edu.au
+
+   Programmer: Andy Vo, voa1@student.unimelb.edu.au
+
+   Algorithms are fun!
 */
 
 #include <stdio.h>
@@ -138,7 +142,7 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 	point_t one_point;
 	/* add your code here for stage 2 */
 
-	/* populates points[] with data from the input*/
+	/* populates points[] with data from the input */
 	int i = 1;
 	while (read_one_point(one_point, num_dimensions)) {
 		for (int j = 0; j < num_dimensions; j++) {
@@ -208,10 +212,10 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
-	point_t point_a;
+	point_t point_a; /* stores a point to compare */
 	point_t skyline_points[num_points];
 	int skyline_points_count = 0;
-	int skyline_ref[num_points];
+	int skyline_ref[num_points]; /* stores a ref no. to found skyline point */
 
 	for (int i = 0; i < num_points; i++) {
 		/* copies a point from points to point_a*/
@@ -219,13 +223,12 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 
 		/* if point_a is a skyline point, copies it to skyline_points */
 		if (is_skyline_point(point_a, points, num_points, num_dimensions, i)) {
-			point_cpy(skyline_points[skyline_points_count], point_a, num_dimensions);
+			point_cpy(skyline_points[skyline_points_count], point_a, 
+				num_dimensions);
 			skyline_ref[skyline_points_count] = i;
 			skyline_points_count++;
 		}
 	}
-
-	//printf("%d\n", skyline_points_count);
 
 	/* prints a list of our skyline points */
 	printf("Skyline points:\n");
@@ -263,7 +266,8 @@ is_dominated(point_t point_a, point_t point_b, int num_dimensions) {
 /* given a point_a and an array of points will return 1 if point_a is a 
 skyline point and 0 otherwise */
 int
-is_skyline_point(point_t point_a, point_t points[], int num_points, int num_dimensions, int skip){
+is_skyline_point(point_t point_a, point_t points[], int num_points, 
+	int num_dimensions, int skip) {
 	for (int i = 0; i < num_points; i++) {
 		/* skips a point to prevent comparing a point to itself */
 		if (i == skip) {
