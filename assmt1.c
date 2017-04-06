@@ -25,6 +25,9 @@
 #define MAX_NUM_POINTS 99 /* maximum number of points */
 #define MAX_NUM_DIMENSIONS 10 /* maximum number of dimensions */
 
+#define divider 100 /* Number to divide sums by in stage 2 */
+#define plus_marker 10 /* What increment to place + in stage 2 */
+
 typedef double point_t[MAX_NUM_DIMENSIONS];
 
 /* function prototypes */
@@ -164,10 +167,10 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 
 	/* prints and graphs each total from coordinate sums */
 	for (i = 0; i < *num_points; i ++) {
-		printf("Point %02d, sum of coordinates (/100): %5.2f |", i + 1, 
-			coordinate_sums[i] / 100);
-		for (int j = 0; j < coordinate_sums[i] / 100; j++) {
-			if (((j + 1) % 10) == 0) {
+		printf("Point %02d, sum of coordinates (/%d): %5.2f |", i + 1, divider,
+			coordinate_sums[i] / divider);
+		for (int j = 0; j < coordinate_sums[i] / divider; j++) {
+			if (((j + 1) % plus_marker) == 0) {
 				printf("+");
 			} 
 			else {
