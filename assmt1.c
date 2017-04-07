@@ -30,9 +30,9 @@
 typedef double point_t[MAX_NUM_DIMENSIONS];
 
 /* used to track skyline points for stage 5 */
-struct points_s{
+struct skyline_point{
 	int ref_no;
-	point_t skyline_point[MAX_NUM_POINTS];
+	double coords[MAX_NUM_DIMENSIONS];
 	int points_dominated;
 };
 
@@ -235,12 +235,11 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
+	struct skyline_point skyline_points[num_points];
 	point_t point_a; /* stores a point to compare */
-	point_t skyline_points[num_points];
-	int skyline_points_count = 0; 
+	int skyline_points_count = 0;
+	int skip = 0; /* skips a point, see is_skyline_point() */
 	int i;
-	int skyline_ref[num_points]; /* stores a ref no. to each skyline point */
-	int skip = 0;
 
 	for (i = 0; i < num_points; i++) {
 		/* copies a point from points to point_a*/
@@ -251,19 +250,20 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 		if (is_skyline_point(point_a, points, num_points, 
 			num_dimensions, skip)) {
 			
-			point_cpy(skyline_points[skyline_points_count], point_a, 
+			point_cpy(skyline_points[skyline_points_count].coords, point_a, 
 				num_dimensions);
 			
-			skyline_ref[skyline_points_count] = i;
+			skyline_points[skyline_points_count].ref_no = i;
 			skyline_points_count++;
 		}
+
 	}
 
-	/* prints a list of our skyline points */
-	printf("Skyline points:\n");
+	/* prints out the points we found */
 	for (i = 0; i < skyline_points_count; i++) {
-		print_point(skyline_points[i], num_dimensions, skyline_ref[i]);
-	}
+		print_point(skyline_points[i].coords, num_dimensions, 
+			skyline_points[i].ref_no);
+	}	
 }
 
 /* given two points, will copy the coords from point_b to point_a */
@@ -315,6 +315,45 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FIVE);
 	
 	/* add your code here for stage 5 */
+	struct skyline_point skyline_points[num_points];
+	point_t point_a; /* stores a point to compare */
+	int skyline_points_count = 0;
+	int skip = 0;
+	int i;
+
+	/* replicated for stage 4 */
+	for (i = 0; i < num_points; i++) {
+		/* copies a point from points to point_a*/
+		point_cpy(point_a, points[i], num_dimensions);
+
+		/* if point_a is a skyline point, copies it to skyline_points */
+		skip = i;
+		if (is_skyline_point(point_a, points, num_points, 
+			num_dimensions, skip)) {
+			
+			point_cpy(skyline_points[skyline_points_count].coords, point_a, 
+				num_dimensions);
+			
+			skyline_points[skyline_points_count].ref_no = i;
+			skyline_points_count++;
+		}
+
+	}
+
+	/* add the number of dominations to skyline_points */
+	for (i = 0; i < skyline_points_count; i++) {
+		skyline_points[i].points_dominated = no_of_dominations(
+			skyline_points[i].coords, points, num_points, num_dimensions, 
+			skyline_points[i].ref_no);
+	}
+
+	for (i = 0; i < skyline_points_count; i++) {
+		print_point(skyline_points[i].coords, num_dimensions, skyline_points[i].ref_no);
+	}
+
+	for (i = 0; i < skyline_points_count; i++) {
+		printf("%d %d\n", skyline_points[i].points_dominated,skyline_points[i].ref_no);
+	}
 
 }
 
