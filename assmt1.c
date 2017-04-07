@@ -30,11 +30,11 @@
 typedef double point_t[MAX_NUM_DIMENSIONS];
 
 /* used to track skyline points for stage 5 */
-struct skyline_point{
+typedef struct skyline_point{
 	int ref_no;
 	double coords[MAX_NUM_DIMENSIONS];
 	int points_dominated;
-};
+} skyline_point;
 
 /* function prototypes */
 void stage_one(point_t one_point, int *num_points, int num_dimensions);
@@ -56,6 +56,7 @@ int is_skyline_point(point_t point_a, point_t points[], int num_points,
 int is_dominant(point_t point_a, point_t point_b, int num_dimensions);
 int no_of_dominations(point_t point_a, point_t points[], int num_points, 
 	int num_dimensions, int skip);
+int skyline_compare(const void *v1, const void *v2);
 
 /* main program binds it all together */
 int
@@ -235,7 +236,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
-	struct skyline_point skyline_points[num_points];
+	skyline_point skyline_points[num_points];
 	point_t point_a; /* stores a point to compare */
 	int skyline_points_count = 0;
 	int skip = 0; /* skips a point, see is_skyline_point() */
@@ -319,7 +320,7 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FIVE);
 	
 	/* add your code here for stage 5 */
-	struct skyline_point skyline_points[num_points];
+	skyline_point skyline_points[num_points];
 	point_t point_a; /* stores a point to compare */
 	int skyline_points_count = 0;
 	int skip = 0;
@@ -351,11 +352,17 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 			skyline_points[i].ref_no);
 	}
 
-	for (i = 0; i < skyline_points_count; i++) {
-		printf("%d %.2d\n", skyline_points[i].points_dominated,skyline_points[i].ref_no + 1);
-	}
+	/* sorts the skyline points by points_dominated and ref_no */
+	qsort(skyline_points, skyline_points_count, sizeof(skyline_point), 
+		skyline_compare);
 
 	printf("Sorted skyline points:\n");
+	for (i = 0; i < skyline_points_count; i++) {
+		print_point(skyline_points[i].coords, num_dimensions, 
+			skyline_points[i].ref_no);
+		printf("Number of points dominated: %d\n", 
+			skyline_points[i].points_dominated);
+	}
 }
 
 /* returns 1 if point_a dominates point_b and 0 otherwise
@@ -396,4 +403,30 @@ no_of_dominations(point_t point_a, point_t points[], int num_points,
 		}
 	}
 	return points_dominated;
+}
+
+/* code copied from stackoverflow
+http://stackoverflow.com/questions/8721189/how-to-sort-an-array-of-structs-in-c
+author: Jonathan Leffler
+*/
+int skyline_compare(const void *v1, const void *v2)
+{
+    const skyline_point *p1 = (skyline_point *) v1;
+    const skyline_point *p2 = (skyline_point *) v2;
+    
+    if (p1->points_dominated > p2->points_dominated) {
+        return -1;
+    }
+    else if (p1->points_dominated < p2->points_dominated) {
+        return +1;
+    }
+    else if (p1->ref_no < p2->ref_no){
+        return -1;
+    }
+    else if (p1->ref_no > p2->ref_no){
+        return +1;
+    }
+    else {
+        return 0;
+    }
 }
