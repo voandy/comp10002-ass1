@@ -29,6 +29,13 @@
 
 typedef double point_t[MAX_NUM_DIMENSIONS];
 
+/* used to track skyline points for stage 5 */
+struct points_s{
+	int ref_no;
+	point_t skyline_point[MAX_NUM_POINTS];
+	int points_dominated;
+};
+
 /* function prototypes */
 void stage_one(point_t one_point, int *num_points, int num_dimensions);
 void stage_two(point_t points[], int *num_points, int num_dimensions, 
@@ -41,9 +48,13 @@ void print_stage_heading(int stage);
 int read_one_point(point_t one_point, int num_dimensions);
 
 /* add your own function prototypes here */
+void print_point(point_t one_point, int num_dimensions, int point_ref);
 void point_cpy(point_t point_a, point_t point_b, int num_dimensions);
 int is_dominated(point_t point_a, point_t point_b, int num_dimensions);
 int is_skyline_point(point_t point_a, point_t points[], int num_points, 
+	int num_dimensions, int skip);
+int is_dominant(point_t point_a, point_t point_b, int num_dimensions);
+int no_of_dominations(point_t point_a, point_t points[], int num_points, 
 	int num_dimensions, int skip);
 
 /* main program binds it all together */
@@ -119,19 +130,22 @@ stage_one(point_t one_point, int *num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_ONE);
 	
 	/* add your code here for stage 1 */
-	printf("Point 01: <");
-
 	/* reads one point and prints the coordinates */
-	int i;
 	read_one_point(one_point, num_dimensions);
+	print_point(one_point, num_dimensions, 0);
+}
 
+/* prints a single point */
+void
+print_point(point_t one_point, int num_dimensions, int point_ref) {
+	printf("Point %02d: <", point_ref + 1);
+	int i;
 	for (i = 0; i < num_dimensions; i++) {
 		printf("%.2f", one_point[i]);
 		if (i < num_dimensions - 1) {
 			printf(", ");
 		}
 	}
-
 	printf(">\n");
 }
 
@@ -224,7 +238,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	point_t point_a; /* stores a point to compare */
 	point_t skyline_points[num_points];
 	int skyline_points_count = 0; 
-	int i, j;
+	int i;
 	int skyline_ref[num_points]; /* stores a ref no. to each skyline point */
 	int skip = 0;
 
@@ -248,14 +262,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	/* prints a list of our skyline points */
 	printf("Skyline points:\n");
 	for (i = 0; i < skyline_points_count; i++) {
-		printf("Point %02d: <", skyline_ref[i] + 1);
-		for (j = 0; j < num_dimensions; j++) {
-			printf("%.2f", skyline_points[i][j]);
-			if (j < num_dimensions - 1) {
-				printf(", ");
-			}
-		}
-		printf(">\n");
+		print_point(skyline_points[i], num_dimensions, skyline_ref[i]);
 	}
 }
 
@@ -308,5 +315,39 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FIVE);
 	
 	/* add your code here for stage 5 */
+
 }
 
+/* returns 1 if point_a dominates point_b and 0 otherwise
+subtly different for is_dominated, a point that isn't dominated by another 
+point doesn't necessarily dominate that point in return*/
+int 
+is_dominant(point_t point_a, point_t point_b, int num_dimensions) {
+	int i;
+	for (i = 0; i < num_dimensions; i++) {
+		if (point_a[i] < point_b[i]) {
+			return 0;
+		}
+	}
+	return 1;
+}
+
+/* given a point_a and an array of points will return the number of points
+point_a dominates */
+int 
+no_of_dominations(point_t point_a, point_t points[], int num_points, 
+	int num_dimensions, int skip) {
+	int i;
+	int points_dominated = 0;
+
+	for (i = 0; i < num_points; i++) {
+		/* skips a point to prevent comparing a point to itself */
+		if (i == skip) {
+			i++;
+		}
+		if (is_dominant(point_a, points[i], num_dimensions)) {
+			points_dominated++;
+		}
+	}
+	return points_dominated;
+}
