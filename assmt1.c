@@ -298,6 +298,10 @@ is_skyline_point(point_t point_a, point_t points[], int num_points,
 		if (i == skip) {
 			i++;
 		}
+		/* if point_a happens to be the last point we break */
+		if (i == num_points) {
+			break;
+		}
 		if (is_dominated(point_a, points[i], num_dimensions)) {
 			return 0;
 		}
@@ -348,17 +352,14 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	}
 
 	for (i = 0; i < skyline_points_count; i++) {
-		print_point(skyline_points[i].coords, num_dimensions, skyline_points[i].ref_no);
+		printf("%d %.2d\n", skyline_points[i].points_dominated,skyline_points[i].ref_no + 1);
 	}
 
-	for (i = 0; i < skyline_points_count; i++) {
-		printf("%d %d\n", skyline_points[i].points_dominated,skyline_points[i].ref_no);
-	}
-
+	printf("Sorted skyline points:\n");
 }
 
 /* returns 1 if point_a dominates point_b and 0 otherwise
-subtly different for is_dominated, a point that isn't dominated by another 
+subtly different from is_dominated, a point that isn't dominated by another 
 point doesn't necessarily dominate that point in return*/
 int 
 is_dominant(point_t point_a, point_t point_b, int num_dimensions) {
@@ -379,10 +380,16 @@ no_of_dominations(point_t point_a, point_t points[], int num_points,
 	int i;
 	int points_dominated = 0;
 
+	i = 0;
+
 	for (i = 0; i < num_points; i++) {
 		/* skips a point to prevent comparing a point to itself */
 		if (i == skip) {
 			i++;
+		}
+		/* if point_a happens to be the last point we break */
+		if (i == num_points) {
+			break;
 		}
 		if (is_dominant(point_a, points[i], num_dimensions)) {
 			points_dominated++;
