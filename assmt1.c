@@ -261,6 +261,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	}
 
 	/* prints out the points we found */
+	printf("Skyline points:\n");
 	for (i = 0; i < skyline_points_count; i++) {
 		print_point(skyline_points[i].coords, num_dimensions, 
 			skyline_points[i].ref_no);
