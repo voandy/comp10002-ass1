@@ -24,17 +24,17 @@
 #define MAX_NUM_POINTS 99 /* maximum number of points */
 #define MAX_NUM_DIMENSIONS 10 /* maximum number of dimensions */
 
-#define divider 100 /* Number to divide sums by in stage 2 */
-#define plus_marker 10 /* What increment to place + in stage 2 */
+#define DIVIDER 100 /* Number to divide sums by in stage 2 */
+#define PLUS_MARKER 10 /* What increment to place + in stage 2 */
 
 typedef double point_t[MAX_NUM_DIMENSIONS];
 
 /* used to track skyline points for stage 5 */
-typedef struct skyline_point{
+typedef struct skyline_point_t{
 	int ref_no;
 	double coords[MAX_NUM_DIMENSIONS];
 	int points_dominated;
-} skyline_point;
+} skyline_point_t;
 
 /* function prototypes */
 void stage_one(point_t one_point, int *num_points, int num_dimensions);
@@ -186,10 +186,10 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 
 	/* prints and graphs each total from coordinate sums */
 	for (i = 0; i < *num_points; i ++) {
-		printf("Point %02d, sum of coordinates (/%d): %5.2f |", i + 1, divider,
-			coordinate_sums[i] / divider);
-		for (j = 0; j < coordinate_sums[i] / divider; j++) {
-			if (((j + 1) % plus_marker) == 0) {
+		printf("Point %02d, sum of coordinates (/%d): %5.2f |", i + 1, DIVIDER,
+			coordinate_sums[i] / DIVIDER);
+		for (j = 0; j < coordinate_sums[i] / DIVIDER; j++) {
+			if (((j + 1) % PLUS_MARKER) == 0) {
 				printf("+");
 			} 
 			else {
@@ -236,7 +236,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
-	skyline_point skyline_points[num_points];
+	skyline_point_t skyline_points[num_points];
 	point_t point_a; /* stores a point to compare */
 	int skyline_points_count = 0;
 	int skip = 0; /* skips a point, see is_skyline_point() */
@@ -321,7 +321,7 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FIVE);
 	
 	/* add your code here for stage 5 */
-	skyline_point skyline_points[num_points];
+	skyline_point_t skyline_points[num_points];
 	point_t point_a; /* stores a point to compare */
 	int skyline_points_count = 0;
 	int skip = 0;
@@ -354,7 +354,7 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	}
 
 	/* sorts the skyline points by points_dominated and ref_no */
-	qsort(skyline_points, skyline_points_count, sizeof(skyline_point), 
+	qsort(skyline_points, skyline_points_count, sizeof(skyline_point_t), 
 		skyline_compare);
 
 	printf("Sorted skyline points:\n");
@@ -412,8 +412,8 @@ author: Jonathan Leffler
 */
 int skyline_compare(const void *v1, const void *v2)
 {
-    const skyline_point *p1 = (skyline_point *) v1;
-    const skyline_point *p2 = (skyline_point *) v2;
+    const skyline_point_t *p1 = (skyline_point_t *) v1;
+    const skyline_point_t *p2 = (skyline_point_t *) v2;
     
     if (p1->points_dominated > p2->points_dominated) {
         return -1;
