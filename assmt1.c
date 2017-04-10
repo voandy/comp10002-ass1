@@ -236,9 +236,9 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
-	skyline_point_t skyline_points[num_points];
-	point_t point_a; /* stores a point to compare */
+	skyline_point_t skyline_points[num_points]; /*stores skyline points */
 	int skyline_points_count = 0;
+	point_t point_a; /* stores a point to compare */
 	int skip = 0; /* skips a point, see is_skyline_point() */
 	int i;
 
@@ -327,7 +327,7 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 	int skip = 0;
 	int i;
 
-	/* replicated for stage 4 */
+	/* replicated from stage 4 */
 	for (i = 0; i < num_points; i++) {
 		/* copies a point from points to point_a*/
 		point_cpy(point_a, points[i], num_dimensions);
@@ -368,7 +368,7 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 
 /* returns 1 if point_a dominates point_b and 0 otherwise
 subtly different from is_dominated, a point that isn't dominated by another 
-point doesn't necessarily dominate that point in return*/
+point doesn't necessarily dominate that point in return */
 int 
 is_dominant(point_t point_a, point_t point_b, int num_dimensions) {
 	int i;
@@ -421,10 +421,10 @@ int skyline_compare(const void *v1, const void *v2)
     else if (p1->points_dominated < p2->points_dominated) {
         return +1;
     }
-    else if (p1->ref_no < p2->ref_no){
+    else if (p1->ref_no < p2->ref_no) {
         return -1;
     }
-    else if (p1->ref_no > p2->ref_no){
+    else if (p1->ref_no > p2->ref_no) {
         return +1;
     }
     else {
