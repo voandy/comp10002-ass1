@@ -162,7 +162,7 @@ stage_two(point_t points[], int *num_points, int num_dimensions,
 	/* add your code here for stage 2 */
 	int i, j;
 
-	/* populates points[] with data from the input, i start at 1 as we have
+	/* populates points[] with data from the input, i starts at 1 as we have
 	already read one point in stage one */
 	i = 1;
 	while (read_one_point(one_point, num_dimensions)) {
@@ -236,7 +236,8 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 	print_stage_heading(STAGE_NUM_FOUR);
 	
 	/* add your code here for stage 4 */
-	skyline_point_t skyline_points[num_points]; /*stores skyline points */
+	skyline_point_t skyline_points[num_points]; /* array of struct used to 
+	store skyline points */
 	int skyline_points_count = 0;
 	point_t point_a; /* stores a point to compare */
 	int skip = 0; /* skips a point, see is_skyline_point() */
@@ -246,7 +247,7 @@ stage_four(point_t points[], int num_points, int num_dimensions) {
 		/* copies a point from points to point_a*/
 		point_cpy(point_a, points[i], num_dimensions);
 
-		/* if point_a is a skyline point, copies it to skyline_points */
+		/* if point_a is a skyline point, copies it to skyline_points[] */
 		skip = i;
 		if (is_skyline_point(point_a, points, num_points, 
 			num_dimensions, skip)) {
@@ -313,15 +314,14 @@ is_skyline_point(point_t point_a, point_t points[], int num_points,
 
 
 /* stage 5 - sort and print the skyline points by the number of points 
-   they dominate
-*/
+they dominate */
 void 
 stage_five(point_t points[], int num_points, int num_dimensions) {
 	/* print stage heading for stage 5 */
 	print_stage_heading(STAGE_NUM_FIVE);
 	
 	/* add your code here for stage 5 */
-	skyline_point_t skyline_points[num_points];
+	skyline_point_t skyline_points[num_points]; /*stores skyline points */
 	point_t point_a; /* stores a point to compare */
 	int skyline_points_count = 0;
 	int skip = 0;
@@ -353,7 +353,8 @@ stage_five(point_t points[], int num_points, int num_dimensions) {
 			skyline_points[i].ref_no);
 	}
 
-	/* sorts the skyline points by points_dominated and ref_no */
+	/* sorts the skyline points by points_dominated and ref_no, see 
+	skyline_compare() */
 	qsort(skyline_points, skyline_points_count, sizeof(skyline_point_t), 
 		skyline_compare);
 
@@ -409,7 +410,8 @@ no_of_dominations(point_t point_a, point_t points[], int num_points,
 /* code copied from stackoverflow
 http://stackoverflow.com/questions/8721189/how-to-sort-an-array-of-structs-in-c
 author: Jonathan Leffler
-*/
+
+Comparison function used for sorting in stage_five. */
 int skyline_compare(const void *v1, const void *v2)
 {
     const skyline_point_t *p1 = (skyline_point_t *) v1;
